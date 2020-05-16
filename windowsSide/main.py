@@ -64,7 +64,7 @@ def sendData(data, datatp):
 WINDOWS_HOST = "localhost"
 STREAM_HOST = 'http://192.168.1.39:8081/'
 RASPBERRY_PORT = 5000
-BIT_RATE = 9600
+BAUD_RATE = 9600
 canvas = "800x800"
 labelFont = ('times', 20, 'bold')
 buttonFont = ('times', 10, 'bold')
@@ -93,7 +93,7 @@ print ("Connection from: " + str(address))"""
 
 
 while 1:
-    #data = connection.recv(BIT_RATE).decode()
+    #data = connection.recv(BAUD_RATE).decode()
     # if not data:
     #    break
     #print ("From raspberry pi: " + str(data))
