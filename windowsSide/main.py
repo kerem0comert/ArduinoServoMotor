@@ -46,10 +46,10 @@ def video_stream():
 
 #------------------------------------
 
-host = "192.168.1.42"
-streamHost = 'http://192.168.1.34:8081/'
-port = 5000
-bitRate = 9600
+RASPBERRY_HOST = "192.168.1.39"
+STREAM_HOST = 'http://192.168.1.34:8081/'
+RASPBERRY_PORT = 5000
+BIT_RATE = 9600
 canvas = "800x800"
 labelFont = ('times', 20, 'bold')
 buttonFont = ('times', 10 , 'bold')
@@ -66,29 +66,23 @@ app.grid()
 lmain = Label(app)
 lmain.grid()
 
-
+"""
 mySocket = socket.socket()
-mySocket.bind((host,port))
+mySocket.bind((RASPBERRY_HOST,RASPBERRY_PORT))
 mySocket.listen(1)
-
 print("Listening...")
 connection, address = mySocket.accept()
-
 print ("Connection from: " + str(address))
 
-stream = cv2.VideoCapture(streamHost)
-
-while True:
-    data = connection.recv(bitRate).decode()
+stream = cv2.VideoCapture(STREAM_HOST)
+"""
+while 1:
+   """ data = connection.recv(BIT_RATE).decode()
     if not data:
-        break
+        break"""
     print ("From raspberry pi: " + str(data))
 
-    
-
-
-    if cv2.waitKey(1) == 27:
-        exit(0)
+   # if cv2.waitKey(1) == 27: exit(0)
 
 
     sliderTilt = OrientationSlider('t', root, from_= 90, to=-90, tickinterval = 10, 
@@ -121,8 +115,6 @@ while True:
     buttonReset = Button(root, text='Reset To Origin', command=ResetSlider, bg = 'red', fg = '#fff')
     buttonReset.config(font= buttonFont)
     buttonReset.place(x=350,y=700, height = 80, width = 100)
-
-
 
     video_stream()
     root.mainloop()

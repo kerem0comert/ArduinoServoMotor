@@ -7,14 +7,14 @@ Servo servoPan;
 int servoIndex; //0 = tilt / 1 = pan
 
 int incomingData = 1;
-int bitRate =  9600;
+int BIT_RATE =  9600;
 int servoDelay = 15;
 int counter = 0;
 
-int tiltPin = 9;
+int ARD_TILT_PIN = 9;
 int tiltValue;   
 
-int panPin = 7;
+int ARD_PAN_PIN = 7;
 int panValue;
 
 int lastTilt = 0;
@@ -27,9 +27,9 @@ char readChar;
 char carray1[6]; //magic needed to convert string to a number 
 
 void setup() {
-  servoTilt.attach(tiltPin);  
-  servoPan.attach(panPin);
-  Serial.begin(bitRate);
+  servoTilt.attach(ARD_TILT_PIN);  
+  servoPan.attach(ARD_PAN_PIN);
+  Serial.begin(BIT_RATE);
 
 }
 
