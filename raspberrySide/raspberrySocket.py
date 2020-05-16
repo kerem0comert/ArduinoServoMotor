@@ -1,26 +1,26 @@
-import socket
+import socket, serial
+from time import sleep
  
 def Main():
-    host = "192.168.2.107"
+    host = '192.168.1.107'
     port = 5000
-     
+    arduinoPort = '/dev/ttyACM0'
+    bandRate = 9600
+        
     mySocket = socket.socket()
-    mySocket.bind((host,port))
-     
-    mySocket.listen(1)
-    conn, addr = mySocket.accept()
-    print ("Connection from: " + str(addr))
+    mySocket.connect((host,port))
+    message = 'ready'
+    ser = serial.Serial(arduinoPort, bandRate)
+        
     while True:
-            data = conn.recv(1024).decode()
-            if not data:
-                    break
-            print ("from connected  user: " + str(data))
-             
-            data = str(data).upper()
-            print ("sending: " + str(data))
-            conn.send(data.encode())
-             
-    conn.close()
-     
+        mySocket.send(message.encode())
+        data = mySocket.recv(bandRate).decode()
+        print ('Received from server: ', data)
+
+        ser.write(data.encode()) #serialize the data
+        
+
+    mySocket.close()
+ 
 if __name__ == '__main__':
     Main()

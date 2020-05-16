@@ -46,8 +46,8 @@ def video_stream():
 
 #------------------------------------
 
-RASPBERRY_HOST = "192.168.1.39"
-STREAM_HOST = 'http://192.168.1.34:8081/'
+WINDOWS_HOST = "192.168.1.107"
+STREAM_HOST = 'http://192.168.1.39:8081/'
 RASPBERRY_PORT = 5000
 BIT_RATE = 9600
 canvas = "800x800"
@@ -66,23 +66,23 @@ app.grid()
 lmain = Label(app)
 lmain.grid()
 
-"""
+
 mySocket = socket.socket()
-mySocket.bind((RASPBERRY_HOST,RASPBERRY_PORT))
+mySocket.bind((WINDOWS_HOST,RASPBERRY_PORT))
 mySocket.listen(1)
 print("Listening...")
 connection, address = mySocket.accept()
 print ("Connection from: " + str(address))
 
 stream = cv2.VideoCapture(STREAM_HOST)
-"""
+
 while 1:
-   """ data = connection.recv(BIT_RATE).decode()
+    data = connection.recv(BIT_RATE).decode()
     if not data:
-        break"""
+        break
     print ("From raspberry pi: " + str(data))
 
-   # if cv2.waitKey(1) == 27: exit(0)
+    if cv2.waitKey(1) == 27: exit(0)
 
 
     sliderTilt = OrientationSlider('t', root, from_= 90, to=-90, tickinterval = 10, 
