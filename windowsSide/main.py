@@ -8,7 +8,7 @@ from PIL import ImageTk, Image
 from VideoStreamThread import *
 
 
-class OrientationSlider(Scale):
+class PositionSlider(Scale):
     def __init__(self, tp, master=None, **kwargs):
         # default constructor of tkinter slider
         Scale.__init__(self, master, **kwargs)
@@ -17,24 +17,23 @@ class OrientationSlider(Scale):
 
     def updateValue(self, event):
         print("Angle = ", self.get(), " ", self.tp)
-        #sendData(self.get(), self.tp)
 
     def moveLeft(self, event):
-        print("Angle = ", self.get(), " ", self.tp)
         self.set(self.get() + 1)
-        #sendData(self.get() - 1, self.tp)
+        print("Angle = ", self.get(), " ", self.tp)
+    
     def moveRight(self, event):
-        print("Angle = ", self.get(), " ", self.tp)
         self.set(self.get() - 1)
-        #sendData(self.get() - 1, self.tp)
+        print("Angle = ", self.get(), " ", self.tp)
+        
     def moveUp(self, event):
-        print("Angle = ", self.get(), " ", self.tp)
         self.set(self.get() - 1)
-        #sendData(self.get() - 1, self.tp)
-    def moveDown(self, event):
         print("Angle = ", self.get(), " ", self.tp)
+        
+    def moveDown(self, event):
         self.set(self.get() + 1)
-        #sendData(self.get() - 1, self.tp)
+        print("Angle = ", self.get(), " ", self.tp)
+        
     def keyReleased(self, event): sendData(self.get(), self.tp)
     
 
@@ -97,17 +96,16 @@ while 1:
     # if not data:
     #    break
     #print ("From raspberry pi: " + str(data))
-    sliderTilt = OrientationSlider('t', root, from_=90, to=-90, tickinterval=20,
-                                   orient=HORIZONTAL, troughcolor='grey', length=200)  # creates widget
+    sliderTilt = PositionSlider('t', root, from_=90, to=-90, tickinterval=20,
+                                   orient=HORIZONTAL, troughcolor='grey', length=200)
     sliderTilt.grid(row=1, column=1)
     sliderTilt.set(0)
 
-    x = IntVar()
-    sliderPan = OrientationSlider('p', root, from_=-90, to=90, tickinterval=20,
-                                  orient=VERTICAL, troughcolor='grey', length=200, showvalue=0,
-                                  variable=x)  # creates widget
+    sliderPan = PositionSlider('p', root, from_=-90, to=90, tickinterval=20,
+                                  orient=VERTICAL, troughcolor='grey', length=200, showvalue=0)  
     sliderPan.grid(row=1, column=1)
     sliderPan.set(0)
+    
     buttonReset = Button(root, text='Reset To Origin',
                          command=ResetSlider, bg='red', fg='#fff')
     buttonReset.config(font=buttonFont)
