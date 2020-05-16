@@ -48,13 +48,10 @@ def ResetSlider():
 
 def sendData(data, datatp):
     data = data if data > 90 else data + 90
-    if(data < 10):
-        data = "00" + str(data)
-    elif(data < 100):
-        data = "0" + str(data)
-    else:
-        data = str(data)
-    toSend = data + 't'  if datatp == 't' else data + 'p'
+    if(data < 10): data = "00" + str(data)
+    elif(data < 100): data = "0" + str(data)
+    else:  data = str(data)
+    toSend = data + datatp
     print(toSend)
     #connection.send(repr(toSend).encode('utf-8'))"""
 
@@ -105,7 +102,7 @@ while 1:
                                   orient=VERTICAL, troughcolor='grey', length=200, showvalue=0)  
     sliderPan.grid(row=1, column=1)
     sliderPan.set(0)
-    
+
     buttonReset = Button(root, text='Reset To Origin',
                          command=ResetSlider, bg='red', fg='#fff')
     buttonReset.config(font=buttonFont)
