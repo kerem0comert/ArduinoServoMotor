@@ -17,6 +17,7 @@ class PositionSlider(Scale):
 
     def updateValue(self, event):
         print("Angle = ", self.get(), " ", self.tp)
+        sendData(self.get(), self.tp)
 
     def moveLeft(self, event):
         self.set(self.get() + 1)
@@ -33,6 +34,14 @@ class PositionSlider(Scale):
     def moveDown(self, event):
         self.set(self.get() + 1)
         print("Angle = ", self.get(), " ", self.tp)
+    
+    def powerUp(self, event):
+        self.set(self.get() + 1)
+        print("Power = ", self.get(), " ", self.tp)
+
+    def powerDown(self, event):
+        self.set(self.get() - 1)
+        print("Power = ", self.get(), " ", self.tp)
         
     def keyReleased(self, event): sendData(self.get(), self.tp)
     
@@ -42,7 +51,7 @@ class PositionSlider(Scale):
 def ResetSlider():
     sliderTilt.set(0)
     sliderPan.set(0)
-    print("T: ", sliderTilt.get(), ",P: ", sliderPan.get())
+    print(f"T:{sliderTilt.get()} P:{sliderPan.get()} W:{sliderPower.get()}")
     sendData(sliderTilt.get(), sliderPan.get())
 
 
@@ -56,7 +65,6 @@ def sendData(data, datatp):
     print(toSend)
     toSend = str(toSend)
     connection.send(repr(toSend).encode('utf-8'))
-    return data, datatp
 
 # ------------------------------------
 
@@ -110,6 +118,11 @@ while 1:
     sliderPan.grid(row=1, column=0)
     sliderPan.set(0)
 
+    sliderPower = PositionSlider('w', root, from_=-90, to=90, tickinterval=20,
+                                  orient=VERTICAL, troughcolor='green', length=200, showvalue=0)  
+    sliderPower.grid(row=1, column=1)
+    sliderPower.set(0)
+
     buttonReset = Button(root, text='Reset To Origin',
                          command=ResetSlider, bg='red', fg='#fff')
     buttonReset.config(font=buttonFont)
@@ -120,10 +133,14 @@ while 1:
     root.bind("<Right>", sliderTilt.moveRight)
     root.bind("<Up>", sliderPan.moveUp)
     root.bind("<Down>", sliderPan.moveDown)
+    root.bind("<W>", sliderPower.powerUp)
+    root.bind("<S>", sliderPower.powerDown)
     root.bind('<KeyRelease-Left>',sliderTilt.keyReleased)
     root.bind('<KeyRelease-Right>',sliderTilt.keyReleased)
     root.bind('<KeyRelease-Up>',sliderPan.keyReleased)
     root.bind('<KeyRelease-Down>',sliderPan.keyReleased)
+    root.bind("<KeyRelease-W>", sliderPower.keyReleased)
+    root.bind("<KeyRelease-S>", sliderPower.keyReleased)
     root.mainloop()
 
 connection.close()
