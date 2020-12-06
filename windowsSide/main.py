@@ -43,7 +43,7 @@ def ResetSlider():
     sliderTilt.set(0)
     sliderPan.set(0)
     print("T: ", sliderTilt.get(), ",P: ", sliderPan.get())
-    #sendData(sliderTilt.get(), sliderPan.get())
+    sendData(sliderTilt.get(), sliderPan.get())
 
 
 def sendData(data, datatp):
@@ -51,14 +51,17 @@ def sendData(data, datatp):
     if(data < 10): data = "00" + str(data)
     elif(data < 100): data = "0" + str(data)
     else:  data = str(data)
-    toSend = data + datatp
+    #print("data=", type(data), "datatp=", type(datatp))
+    toSend = str(data) + str(datatp)
     print(toSend)
-    #connection.send(repr(toSend).encode('utf-8'))"""
+    toSend = str(toSend)
+    connection.send(repr(toSend).encode('utf-8'))
+    return data, datatp
 
 # ------------------------------------
 
-WINDOWS_HOST = "localhost"
-STREAM_HOST = 'http://192.168.1.39:8081/'
+WINDOWS_HOST = "192.168.1.107"
+STREAM_HOST = 'http://192.168.1.34:8081/'
 RASPBERRY_PORT = 5000
 BAUD_RATE = 9600
 canvas = "800x800"
@@ -80,36 +83,39 @@ lmain = Label(app)
 lmain.grid(row=0, column=0)
 
 
-"""mySocket = socket.socket()
+mySocket = socket.socket(socket.AF_INET, #for ipv4 communiciation
+                                socket.SOCK_STREAM # TCP Protocol
+                                )
 mySocket.bind((WINDOWS_HOST, RASPBERRY_PORT))
+
 mySocket.listen(1)
 print("Listening...")
 connection, address = mySocket.accept()
-print ("Connection from: " + str(address))"""
+print ("Connection from: " + str(address))
 
-
+videoStream = VideoStreamThread(lmain)
+videoStream.start()
 while 1:
-    #data = connection.recv(BAUD_RATE).decode()
-    # if not data:
-    #    break
-    #print ("From raspberry pi: " + str(data))
+    data = connection.recv(BAUD_RATE).decode()
+    if not data: break
+    
+    print ("From raspberry pi: " + str(data))
     sliderTilt = PositionSlider('t', root, from_=90, to=-90, tickinterval=20,
                                    orient=HORIZONTAL, troughcolor='grey', length=200)
-    sliderTilt.grid(row=1, column=1)
+    sliderTilt.grid(row=1, column=0)
     sliderTilt.set(0)
 
     sliderPan = PositionSlider('p', root, from_=-90, to=90, tickinterval=20,
                                   orient=VERTICAL, troughcolor='grey', length=200, showvalue=0)  
-    sliderPan.grid(row=1, column=1)
+    sliderPan.grid(row=1, column=0)
     sliderPan.set(0)
 
     buttonReset = Button(root, text='Reset To Origin',
                          command=ResetSlider, bg='red', fg='#fff')
     buttonReset.config(font=buttonFont)
-    buttonReset.grid(row=3, column=1)
+    buttonReset.grid(row=3, column=0)
 
-    #videoStream = VideoStreamThread(lmain)
-    # videoStream.start()
+    
     root.bind("<Left>", sliderTilt.moveLeft)
     root.bind("<Right>", sliderTilt.moveRight)
     root.bind("<Up>", sliderPan.moveUp)
@@ -120,6 +126,6 @@ while 1:
     root.bind('<KeyRelease-Down>',sliderPan.keyReleased)
     root.mainloop()
 
-# connection.close()
+connection.close()
 
 # ----------------------------------

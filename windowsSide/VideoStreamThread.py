@@ -6,7 +6,7 @@ from PIL import ImageTk, Image
 class VideoStreamThread(threading.Thread):
     def __init__(self, lmain):
         threading.Thread.__init__(self)
-        self.STREAM_HOST = 'http://192.168.1.39:8081/'
+        self.STREAM_HOST = 'http://192.168.1.34:8081/'
         self.stream = cv2.VideoCapture(self.STREAM_HOST)
         self.lmain = lmain
         if cv2.waitKey(1) == 27: exit(0)
@@ -21,4 +21,4 @@ class VideoStreamThread(threading.Thread):
             imgtk = ImageTk.PhotoImage(image=img)
             self.lmain.imgtk = imgtk
             self.lmain.configure(image=imgtk)
-            self.lmain.after(1, self.run) 
+            self.lmain.after(3, self.run) 
