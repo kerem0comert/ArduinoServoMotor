@@ -56,7 +56,7 @@ def ResetSlider():
 
 
 def sendData(data, datatp):
-    data = data if data > 90 else data + 90
+    if datatp != 'w': data = data if data > 90 else data + 90
     if(data < 10): data = "00" + str(data)
     elif(data < 100): data = "0" + str(data)
     else:  data = str(data)
@@ -118,7 +118,7 @@ while 1:
     sliderPan.grid(row=1, column=0)
     sliderPan.set(0)
 
-    sliderPower = PositionSlider('w', root, from_=-90, to=90, tickinterval=20,
+    sliderPower = PositionSlider('w', root, from_=255, to=0, tickinterval=20,
                                   orient=VERTICAL, troughcolor='green', length=200, showvalue=0)  
     sliderPower.grid(row=1, column=1)
     sliderPower.set(0)
