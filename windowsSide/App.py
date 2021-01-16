@@ -1,6 +1,6 @@
-from tkinter import Tk, Frame, Label
-from VideoStreamThread import VideoStreamThread
-from PositionSlider import PositionSlider
+from tkinter import Tk, Frame, Label, Button, HORIZONTAL, VERTICAL
+from windowsSide.VideoStreamThread import VideoStreamThread
+from windowsSide.PositionSlider import PositionSlider
 
 class App:
     def __init__(self):
@@ -16,45 +16,46 @@ class App:
         self.app.focus_set()
 
 
-    def initVideoStream(self):
+    def initVideoStream(self, STREAM_HOST):
         # Create a label in the frame
         self.lmain = Label(self.app)
         self.lmain.grid(row=0, column=0)
-        self.videoStream = VideoStreamThread(self.lmain)
+        self.videoStream = VideoStreamThread(self.lmain, STREAM_HOST)
         self.videoStream.start()
 
-    def initGuiElements(self):
-        sliderTilt = PositionSlider('t', root, from_=90, to=-90, tickinterval=20,
+    def initGuiElements(self, connection):
+        self.sliderTilt = PositionSlider(self.connection, 't', self.root, 
+                                    from_=90, to=-90, tickinterval=20,
                                    orient=HORIZONTAL, troughcolor='grey', length=200)
-        sliderTilt.grid(row=1, column=0)
-        sliderTilt.set(0)
+        self.sliderTilt.grid(row=1, column=0)
+        self.sliderTilt.set(0)
 
-        sliderPan = PositionSlider('p', root, from_=-90, to=90, tickinterval=20,
+        self.sliderPan = PositionSlider(self.connection, 'p', self.root, 
+                                    from_=-90, to=90, tickinterval=20,
                                     orient=VERTICAL, troughcolor='grey', length=200, showvalue=0)  
-        sliderPan.grid(row=1, column=1)
-        sliderPan.set(0)
+        self.sliderPan.grid(row=1, column=1)
+        self.sliderPan.set(0)
 
-        sliderPower = PositionSlider('w', root, from_=255, to=0, tickinterval=20,
+        self.sliderPower = PositionSlider(self.connection, 'w', self.root, 
+                                    from_=255, to=0, tickinterval=20,
                                     orient=VERTICAL, troughcolor='green', length=200, showvalue=0)  
-        sliderPower.grid(row=1, column=2)
-        sliderPower.set(0)
+        self.sliderPower.grid(row=1, column=2)
+        self.sliderPower.set(0)
 
-        buttonReset = Button(root, text='Reset To Origin',
-                            command=ResetSlider, bg='red', fg='#fff')
+        """buttonReset = Button(root, text='Reset To Origin',
+                            command=self.resetSlider, bg='red', fg='#fff')
         buttonReset.config(font=buttonFont)
-        buttonReset.grid(row=3, column=0)
+        buttonReset.grid(row=3, column=0)"""
 
-        
-        root.bind("<Left>", sliderTilt.moveLeft)
-        root.bind("<Right>", sliderTilt.moveRight)
-        root.bind("<Up>", sliderPan.moveUp)
-        root.bind("<Down>", sliderPan.moveDown)
-        root.bind("<W>", sliderPower.powerUp)
-        root.bind("<S>", sliderPower.powerDown)
-        root.bind('<KeyRelease-Left>',sliderTilt.keyReleased)
-        root.bind('<KeyRelease-Right>',sliderTilt.keyReleased)
-        root.bind('<KeyRelease-Up>',sliderPan.keyReleased)
-        root.bind('<KeyRelease-Down>',sliderPan.keyReleased)
-        root.bind("<KeyRelease-W>", sliderPower.keyReleased)
-        root.bind("<KeyRelease-S>", sliderPower.keyReleased)
-        root.mainloop()
+        self.root.bind("<Left>", self.sliderTilt.moveLeft)
+        self.root.bind("<Right>", self.sliderTilt.moveRight)
+        self.root.bind("<Up>", self.sliderPan.moveUp)
+        self.root.bind("<Down>", self.sliderPan.moveDown)
+        self.root.bind("<W>", self.sliderPower.powerUp)
+        self.root.bind("<S>", self.sliderPower.powerDown)
+        self.root.bind('<KeyRelease-Left>',self.sliderTilt.keyReleased)
+        self.root.bind('<KeyRelease-Right>',self.sliderTilt.keyReleased)
+        self.root.bind('<KeyRelease-Up>',self.sliderPan.keyReleased)
+        self.root.bind('<KeyRelease-Down>',self.sliderPan.keyReleased)
+        self.root.bind("<KeyRelease-W>", self.sliderPower.keyReleased)
+        self.root.bind("<KeyRelease-S>", self.sliderPower.keyReleased)

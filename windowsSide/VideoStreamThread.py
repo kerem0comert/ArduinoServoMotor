@@ -4,14 +4,11 @@ from PIL import ImageTk, Image
 
 
 class VideoStreamThread(threading.Thread):
-    def __init__(self, lmain):
+    def __init__(self, lmain, STREAM_HOST):
         threading.Thread.__init__(self)
-        self.STREAM_HOST = 'http://192.168.1.33:8081/'
-        self.stream = cv2.VideoCapture(self.STREAM_HOST)
+        self.stream = cv2.VideoCapture(STREAM_HOST)
         self.lmain = lmain
         if cv2.waitKey(1) == 27: exit(0)
-
-
 
     def run(self):
         returnValue, frame = self.stream.read()
