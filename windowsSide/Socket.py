@@ -10,6 +10,6 @@ class Socket:
         
     def startListening(self): 
         self.mySocket.listen(1)
-        self.connection, self.address = self.mySocket.accept()
+        return self.mySocket.accept()
     
     def stopListening(self): self.mySocket.close()

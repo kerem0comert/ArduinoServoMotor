@@ -1,5 +1,5 @@
 import threading
-import cv2
+from cv2 import cv2
 from PIL import ImageTk, Image
 
 
