@@ -11,12 +11,13 @@ const int bitRate =  9600;
 const int servoDelay = 35;
 int counter = 0; //to decode the bytes per position
 
-int tiltValue, panValue, powerValue;
+int tiltValue, panValue, powerValue, potentValue;
 const int panPin = 7;
 const int tiltPin = 9;
 const int dcInputLow = 11;
 const int dcInputHigh = 10;
 const int dcEnable = 6;
+const int potentPin = A0;
 
 int lastTilt = 0;
 int lastPan = 0;
@@ -104,6 +105,10 @@ void loop() {
   Serial.print(lastPan + panValue);
   Serial.print("---- power: ");
   Serial.print(powerValue);
+  Serial.print("---potent: "); 
+  potentValue = analogRead(potentPin);
+  Serial.println(potentValue);
+  Serial.write(potentValue);  
   delay(servoDelay);                           // waits for the servo to get there
 
 }
