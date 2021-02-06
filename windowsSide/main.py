@@ -1,6 +1,7 @@
 
-from App import App
+import App
 from Socket import Socket
+
 
 WINDOWS_HOST = "192.168.1.107"
 STREAM_HOST = 'http://192.168.1.33:8081/'

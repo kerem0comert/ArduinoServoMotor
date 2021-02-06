@@ -9,37 +9,36 @@ class PositionSlider(Scale):
         self.tp = tp
         self.bind("<ButtonRelease-1>", self.updateValue)
         self.connection = connection
+    
+    def printAngle(self): print("Angle = ", self.get(), " ", self.tp)
 
     def updateValue(self, event):
-        print("Angle = ", self.get(), " ", self.tp)
-        main.sendData(self.get(), self.tp)
+        self.printAngle()
+        sendData(self.get(), self.tp)
 
     def moveLeft(self, event):
         self.set(self.get() + 1)
-        print("Angle = ", self.get(), " ", self.tp)
+        self.printAngle()
     
     def moveRight(self, event):
         self.set(self.get() - 1)
-        print("Angle = ", self.get(), " ", self.tp)
+        self.printAngle()
         
     def moveUp(self, event):
         self.set(self.get() - 1)
-        print("Angle = ", self.get(), " ", self.tp)
+        self.printAngle()
         
     def moveDown(self, event):
         self.set(self.get() + 1)
-        print("Angle = ", self.get(), " ", self.tp)
+        self.printAngle()
     
     def powerUp(self, event):
         self.set(self.get() + 1)
-        print("Power = ", self.get(), " ", self.tp)
+        self.printAngle()
 
     def powerDown(self, event):
         self.set(self.get() - 1)
-        print("Power = ", self.get(), " ", self.tp)
+        self.printAngle()
         
     def keyReleased(self, event): 
-        main.sendData(self.get(), self.tp)
-  
-
-
+        sendData(self.get(), self.tp)

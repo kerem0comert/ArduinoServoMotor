@@ -1,6 +1,7 @@
 from tkinter import Tk, Frame, Label, Button, HORIZONTAL, VERTICAL
 from VideoStreamThread import VideoStreamThread
-from PositionSlider import PositionSlider
+import main
+import PositionSlider
 from socket import socket
 
 
