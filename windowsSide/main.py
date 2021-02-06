@@ -19,11 +19,11 @@ class PositionSlider(Scale):
         self.printAngle()
         sendData(self.get(), self.dataType)
 
-    def increment(self, event):
+    def decrement(self, event):
         self.set(self.get() - 1)
         self.printAngle()
     
-    def decrement(self, event):
+    def increment(self, event):
         self.set(self.get() + 1)
         self.printAngle()
         
