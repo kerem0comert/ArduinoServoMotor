@@ -19,25 +19,15 @@ class PositionSlider(Scale):
         self.printAngle()
         sendData(self.get(), self.dataType)
 
-    def moveLeft(self, event):
-        self.set(self.get() + 1)
-        self.printAngle()
-    
-    def moveRight(self, event):
+    def increment(self, event):
         self.set(self.get() - 1)
         self.printAngle()
-        
-    def moveUp(self, event):
-        self.set(self.get() - 1)
-        self.printAngle()
-        
-    def moveDown(self, event):
-        self.set(self.get() + 1)
-        self.printAngle()
     
-    def powerUp(self, event):
+    def decrement(self, event):
         self.set(self.get() + 1)
         self.printAngle()
+        
+
 
     def powerDown(self, event):
         self.set(self.get() - 1)
@@ -91,12 +81,12 @@ class App:
         buttonReset.config(font=buttonFont)
         buttonReset.grid(row=3, column=0)"""
 
-        self.root.bind("<Left>", self.sliderTilt.moveLeft)
-        self.root.bind("<Right>", self.sliderTilt.moveRight)
-        self.root.bind("<Up>", self.sliderPan.moveDown)
-        self.root.bind("<Down>", self.sliderPan.moveUp)
-        self.root.bind("<W>", self.sliderPower.powerUp)
-        self.root.bind("<S>", self.sliderPower.powerDown)
+        self.root.bind("<Left>", self.sliderTilt.decrement)
+        self.root.bind("<Right>", self.sliderTilt.increment)
+        self.root.bind("<Up>", self.sliderPan.increment)
+        self.root.bind("<Down>", self.sliderPan.decrement)
+        self.root.bind("<W>", self.sliderPower.increment)
+        self.root.bind("<S>", self.sliderPower.decrement)
         self.root.bind('<KeyRelease-Left>',self.sliderTilt.keyReleased)
         self.root.bind('<KeyRelease-Right>',self.sliderTilt.keyReleased)
         self.root.bind('<KeyRelease-Up>',self.sliderPan.keyReleased)
