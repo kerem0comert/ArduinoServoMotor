@@ -50,30 +50,30 @@ void loop() {
       incomingData += readChar; //makes the string incomingData
       
       counter ++;
-      Serial.println(counter);
+      //Serial.println(counter);
     }
-    if(incomingData.length() > 0){
+    /*if(incomingData.length() > 0){
       Serial.println(incomingData);
-    }
+    }*/
     if(counter == 5){
       if(readChar == 't')
       {
-        Serial.print("t found");
+        //Serial.print("t found");
         dataType = 0;
       }else if(readChar == 'p')
       {
-        Serial.print("p found");
+        //Serial.print("p found");
         dataType = 1;
       }else if(readChar == 'w')
       {
-        Serial.print("w found");
+        //Serial.print("w found");
         dataType = 2;
       }
        }
 
     if(counter == 6){
       positionString = incomingData.substring(1,4);
-      Serial.println(positionString);
+      //Serial.println(positionString);
       incomingData = "";
       positionString.toCharArray(carray1, sizeof(carray1));
       if(dataType == 0){
@@ -84,8 +84,8 @@ void loop() {
       }else if(dataType == 2){
         powerValue = atoi(carray1);
       }
-      Serial.print("tilt");
-      Serial.println(tiltValue);
+      //Serial.print("tilt");
+      //Serial.println(tiltValue);
       counter = 0;
     }
 }
@@ -99,16 +99,17 @@ void loop() {
   digitalWrite(dcInputHigh,  HIGH);  
   lastPan = panValue;  
   lastPower = powerValue;
-  Serial.print("---- tilt: ");
+  /*Serial.print("---- tilt: ");
   Serial.println(lastTilt + tiltValue);
   Serial.print("---- pan: ");
   Serial.print(lastPan + panValue);
   Serial.print("---- power: ");
   Serial.print(powerValue);
-  Serial.print("---potent: "); 
+  Serial.print("---potent: "); */
   potentValue = analogRead(potentPin);
   Serial.println(potentValue);
-  Serial.write(potentValue);  
+  /*Serial.flush();
+  Serial.print(potentValue);  */
   delay(servoDelay);                           // waits for the servo to get there
 
 }

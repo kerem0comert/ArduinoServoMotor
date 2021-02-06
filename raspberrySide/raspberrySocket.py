@@ -18,7 +18,7 @@ while 1:
     data = windowsSocket.recv(BAUD_RATE).decode()
     print ('Received from server: ', data)
     arduinoSerial.write(data.encode()) #serialize the data abd send to arduino
-    potentValue = arduinoSerial.read(4)
+    potentValue = arduinoSerial.read(20)
     print('potentValue = ', potentValue)
     
 mySocket.close()
