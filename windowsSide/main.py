@@ -3,7 +3,7 @@ from socket import socket
 from Socket import Socket
 from tkinter import Tk, Frame, Label, Button, HORIZONTAL, VERTICAL, Scale
 from VideoStreamThread import VideoStreamThread
-
+from numpy import interp
 
 class PositionSlider(Scale):
     def __init__(self, tp, connection: socket, master=None, **kwargs):
@@ -69,13 +69,13 @@ class App:
 
     def initGuiElements(self):
         self.sliderTilt = PositionSlider('t', self.root, 
-                                    from_=90, to=-90, tickinterval=20,
+                                    from_=-90, to=90, tickinterval=20,
                                    orient=HORIZONTAL, troughcolor='grey', length=200)
         self.sliderTilt.grid(row=1, column=0)
         self.sliderTilt.set(0)
 
         self.sliderPan = PositionSlider('p', self.root, 
-                                    from_=-90, to=90, tickinterval=20,
+                                    from_=90, to=-30, tickinterval=5,
                                     orient=VERTICAL, troughcolor='grey', length=200, showvalue=0)  
         self.sliderPan.grid(row=1, column=1)
         self.sliderPan.set(0)
@@ -112,7 +112,9 @@ BAUD_RATE = 9600
 
 
 def sendData(data, datatp):
-    if datatp != 'w': data = data if data > 90 else data + 90
+    if datatp != 'w':
+        if datatp == 't':  data = int(interp(data, [-90,90], [180,0]))
+        else: data = int(interp(data, [-30,90], [120,0]))
     if(data < 10): data = "00" + str(data)
     elif(data < 100): data = "0" + str(data)
     else:  data = str(data)
