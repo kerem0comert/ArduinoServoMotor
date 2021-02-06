@@ -6,18 +6,18 @@ from VideoStreamThread import VideoStreamThread
 from numpy import interp
 
 class PositionSlider(Scale):
-    def __init__(self, tp, connection: socket, master=None, **kwargs):
+    def __init__(self, dataType, connection: socket, master=None, **kwargs):
         # default constructor of tkinter slider
         Scale.__init__(self, master, **kwargs)
-        self.tp = tp
+        self.dataType = dataType
         self.bind("<ButtonRelease-1>", self.updateValue)
         self.connection = connection
     
-    def printAngle(self): print("Angle = ", self.get(), " ", self.tp)
+    def printAngle(self): print("Angle = ", self.get(), " ", self.dataType)
 
     def updateValue(self, event):
         self.printAngle()
-        sendData(self.get(), self.tp)
+        sendData(self.get(), self.dataType)
 
     def moveLeft(self, event):
         self.set(self.get() + 1)
@@ -44,7 +44,7 @@ class PositionSlider(Scale):
         self.printAngle()
         
     def keyReleased(self, event): 
-        sendData(self.get(), self.tp)
+        sendData(self.get(), self.dataType)
 
 class App:
     def __init__(self, connection: socket):
@@ -111,17 +111,18 @@ RASPBERRY_PORT = 5000
 BAUD_RATE = 9600
 
 
-def sendData(data, datatp):
-    if datatp != 'w':
-        if datatp == 't':  data = int(interp(data, [-90,90], [180,0]))
-        else: data = int(interp(data, [-30,90], [120,0]))
+def sendData(data, dataType):
+    if dataType == 't': data = int(interp(data, [-90,90], [180,0]))
+    elif dataType == 'p': data = int(interp(data, [-30,90], [120,0]))
+    #no mapping needed if data is of type 'w'
+    
+    #make sure data has 3 digits
     if(data < 10): data = "00" + str(data)
     elif(data < 100): data = "0" + str(data)
     else:  data = str(data)
-    #print("data=", type(data), "datatp=", type(datatp))
-    toSend = str(data) + str(datatp)
+    
+    toSend = str(data) + str(dataType)
     print(toSend)
-    toSend = str(toSend)
     connection.send(repr(toSend).encode('utf-8'))
 
 
