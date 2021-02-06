@@ -3,19 +3,19 @@
 Servo servoTilt; 
 Servo servoPan; 
 
-int dataType; //0 = tilt / 1 = pan / 2 = power
+char dataType; //'t', 'p', 'w', 's'
 
-
-const int bitRate =  9600;
-const int servoDelay = 35;
+const int BIT_RATE =  9600;
+const int SERVO_DELAY = 35;
 int counter = 0; //to decode the bytes per position
 
 int tiltValue, panValue, powerValue;
-const int panPin = 7;
-const int tiltPin = 9;
-const int dcInputLow = 11;
-const int dcInputHigh = 10;
-const int dcEnable = 6;
+const int PAN_PIN = 7;
+const int TILT_PIN = 9;
+//const int pwrInputLow = 11;
+//const int pwrInputHigh = 10;
+const int FORWARD_PIN = 6;
+const int BACKWARD_PIN = 5;
 
 
 String incomingData;
@@ -24,12 +24,13 @@ char readChar;
 char carray1[6]; //magic needed to convert string to a number 
 
 void setup() {
-  servoTilt.attach(tiltPin);  
-  servoPan.attach(panPin);
-  pinMode(dcInputLow, OUTPUT); 
-  pinMode(dcInputHigh, OUTPUT);  
-  pinMode(dcEnable, OUTPUT);
-  Serial.begin(bitRate);
+  servoTilt.attach(TILT_PIN);  
+  servoPan.attach(PAN_PIN);
+  //pinMode(dcInputLow, OUTPUT); 
+  //pinMode(dcInputHigh, OUTPUT);  
+  pinMode(FORWARD_PIN, OUTPUT);
+  pinMode(BACKWARD_PIN, OUTPUT);
+  Serial.begin(BIT_RATE);
 
 }
 
@@ -48,58 +49,46 @@ void loop() {
     if(incomingData.length() > 0){
       //Serial.println(incomingData);
     }
-    if(counter == 5){
-      if(readChar == 't')
-      {
-        //Serial.print("t found");
-        dataType = 0;
-      }else if(readChar == 'p')
-      {
-        //Serial.print("p found");
-        dataType = 1;
-      }else if(readChar == 'w')
-      {
-        //Serial.print("w found");
-        dataType = 2;
-      }
-       }
-
+    if(counter == 5) dataType = readChar;
+       
     if(counter == 6){
       positionString = incomingData.substring(1,4);
       //Serial.println(positionString);
       incomingData = "";
       positionString.toCharArray(carray1, sizeof(carray1));
-      if(dataType == 0){
+      if(dataType == 't'){
         tiltValue = atoi(carray1); 
+        servoTilt.write(tiltValue); // sets the servo position according to the scaled value
       }
-      else if(dataType == 1){
+      else if(dataType == 'p'){
         panValue = atoi(carray1);
-      }else if(dataType == 2){
+          servoPan.write(panValue);
+      }else if(dataType == 'w'){
         powerValue = atoi(carray1);
+        analogWrite(BACKWARD_PIN, 0);
+        analogWrite(FORWARD_PIN,  powerValue);   //powerValue
+      }else if(dataType == 's'){
+        powerValue = atoi(carray1);
+        analogWrite(FORWARD_PIN, 0);
+        analogWrite(BACKWARD_PIN, powerValue);
       }
       
       counter = 0;
     }
 }
-
-
-  servoTilt.write(tiltValue); // sets the servo position according to the scaled value
-
-  servoPan.write(panValue);
-  analogWrite(dcEnable,  powerValue);   //powerValue
-  digitalWrite(dcInputLow, LOW);
-  digitalWrite(dcInputHigh,  HIGH);  
-  //printSerial();
-  delay(servoDelay);                           // waits for the servo to get there
+  //digitalWrite(dcInputLow, LOW);
+  //digitalWrite(dcInputHigh,  HIGH);  
+  printSerial();
+  delay(SERVO_DELAY);                           // waits for the servo to get there
 
 }
 
 
 void printSerial(){
-  Serial.print("---- tilt: ");
+ /* Serial.print("---- tilt: ");
   Serial.println(tiltValue);
   Serial.print("---- pan: ");
-  Serial.print(panValue);
-  Serial.print("---- power: ");
+  Serial.print(panValue);*/
+  Serial.println("---- power: ");
   Serial.print(powerValue);
 }

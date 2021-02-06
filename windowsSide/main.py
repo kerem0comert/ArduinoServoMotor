@@ -38,7 +38,7 @@ class PositionSlider(Scale):
 
 class App:
     def __init__(self, connection: socket):
-        self.canvas = "800x800"
+        self.canvas = "500x500"
         self.labelFont = ('times', 20, 'bold')
         self.buttonFont = ('times', 10, 'bold')
         self.root = Tk()
@@ -53,7 +53,7 @@ class App:
     def initVideoStream(self, STREAM_HOST):
         # Create a label in the frame
         self.lmain = Label(self.app)
-        self.lmain.grid(row=0, column=0)
+        self.lmain.grid(row=0, column=1)
         self.videoStream = VideoStreamThread(self.lmain, STREAM_HOST)
         self.videoStream.start()
 
@@ -71,7 +71,7 @@ class App:
         self.sliderPan.set(0)
 
         self.sliderPower = PositionSlider('w', self.root, 
-                                    from_=255, to=0, tickinterval=20,
+                                    from_=100, to=-100, tickinterval=20,
                                     orient=VERTICAL, troughcolor='green', length=200, showvalue=0)  
         self.sliderPower.grid(row=1, column=2)
         self.sliderPower.set(0)
@@ -104,8 +104,10 @@ BAUD_RATE = 9600
 def sendData(data, dataType):
     if dataType == 't': data = int(interp(data, [-90,90], [180,0]))
     elif dataType == 'p': data = int(interp(data, [-30,90], [120,0]))
-    #no mapping needed if data is of type 'w'
-    
+    else: 
+        if data < 0: dataType = 's' #in the case of 'w' datatype, a negative value will indicate 's' for backwards
+        data =  int(interp(abs(data), [0,100], [40,255]))
+ 
     #make sure data has 3 digits
     if(data < 10): data = "00" + str(data)
     elif(data < 100): data = "0" + str(data)
