@@ -93,8 +93,8 @@ class App:
 
         self.root.bind("<Left>", self.sliderTilt.moveLeft)
         self.root.bind("<Right>", self.sliderTilt.moveRight)
-        self.root.bind("<Up>", self.sliderPan.moveUp)
-        self.root.bind("<Down>", self.sliderPan.moveDown)
+        self.root.bind("<Up>", self.sliderPan.moveDown)
+        self.root.bind("<Down>", self.sliderPan.moveUp)
         self.root.bind("<W>", self.sliderPower.powerUp)
         self.root.bind("<S>", self.sliderPower.powerDown)
         self.root.bind('<KeyRelease-Left>',self.sliderTilt.keyReleased)
