@@ -4,6 +4,7 @@ from Socket import Socket
 from tkinter import Tk, Frame, Label, Button, HORIZONTAL, VERTICAL, Scale
 from VideoStreamThread import VideoStreamThread
 from numpy import interp
+import Joystick
 
 class PositionSlider(Scale):
     def __init__(self, dataType, connection: socket, master=None, **kwargs):
@@ -15,23 +16,23 @@ class PositionSlider(Scale):
     
     def printAngle(self): print("Angle = ", self.get(), " ", self.dataType)
 
-    def updateValue(self, event):
+    def updateValue(self):
         self.printAngle()
         sendData(self.get(), self.dataType)
 
-    def decrement(self, event):
+    def decrement(self):
         self.set(self.get() - 1)
         self.printAngle()
     
-    def increment(self, event):
+    def increment(self):
         self.set(self.get() + 1)
         self.printAngle()
         
-    def powerDown(self, event):
+    def powerDown(self):
         self.set(self.get() - 1)
         self.printAngle()
         
-    def keyReleased(self, event): 
+    def keyReleased(self): 
         sendData(self.get(), self.dataType)
 
 class App:
@@ -91,6 +92,10 @@ class App:
         self.root.bind('<KeyRelease-Down>',self.sliderPan.keyReleased)
         self.root.bind("<KeyRelease-W>", self.sliderPower.keyReleased)
         self.root.bind("<KeyRelease-S>", self.sliderPower.keyReleased)
+    
+    def initJoystick(self):
+        self.j = Joystick.Joystick(app.sliderPan, app.sliderTilt, app.sliderPower)
+        self.j.start()
 
 
 WINDOWS_HOST = "192.168.1.107"
@@ -122,10 +127,11 @@ print("Listening...")
 connection, address = socketInstance.startListening()
 print (f"Connection from: {str(address)}")
 app = App(connection)
-app.initVideoStream(STREAM_HOST)
+#app.initVideoStream(STREAM_HOST)
 
 while 1:
     app.initGuiElements()
+    app.initJoystick()
     data = connection.recv(BAUD_RATE).decode()
     if not data: break 
     print(f"From raspberry pi: {str(data)}")
