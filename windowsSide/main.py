@@ -27,8 +27,6 @@ class PositionSlider(Scale):
         self.set(self.get() + 1)
         self.printAngle()
         
-
-
     def powerDown(self, event):
         self.set(self.get() - 1)
         self.printAngle()
