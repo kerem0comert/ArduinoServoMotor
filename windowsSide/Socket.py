@@ -1,5 +1,6 @@
 from socket import socket, AF_INET, SOCK_STREAM
 
+
 class Socket:
     def __init__(self, WINDOWS_HOST, RASPBERRY_PORT):
         self.mySocket = socket(
