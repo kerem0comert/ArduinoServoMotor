@@ -16,7 +16,7 @@ class PositionSlider(Scale):
     
     def printAngle(self): print("Angle = ", self.get(), " ", self.dataType)
 
-    def updateValue(self):
+    def updateValue(self, event):
         self.printAngle()
         sendData(self.get(), self.dataType)
 
@@ -99,7 +99,7 @@ class App:
 
 
 WINDOWS_HOST = "192.168.1.107"
-STREAM_HOST = 'http://192.168.1.38:8081/'
+STREAM_HOST = 'http://192.168.1.34:8081/'
 RASPBERRY_PORT = 5000
 BAUD_RATE = 9600
 
@@ -127,11 +127,11 @@ print("Listening...")
 connection, address = socketInstance.startListening()
 print (f"Connection from: {str(address)}")
 app = App(connection)
-#app.initVideoStream(STREAM_HOST)
+app.initVideoStream(STREAM_HOST)
 
 while 1:
     app.initGuiElements()
-    app.initJoystick()
+    #app.initJoystick()
     data = connection.recv(BAUD_RATE).decode()
     if not data: break 
     print(f"From raspberry pi: {str(data)}")

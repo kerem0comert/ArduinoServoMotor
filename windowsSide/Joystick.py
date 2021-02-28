@@ -33,16 +33,16 @@ class Joystick(threading.Thread):
                     print(f"Left-right: {self.j.get_axis(0)}") #left -1 / right 1
                     print(f"Up-down: {self.j.get_axis(1)}")  #power up -1 / power down 1"""
                     if(self.j.get_axis(0) < -0.95): 
-                        self.sliderPan.decrement()
-                        self.sliderPan.keyReleased()
-                    elif(self.j.get_axis(0) > 0.95): 
                         self.sliderPan.increment()
                         self.sliderPan.keyReleased()
+                    elif(self.j.get_axis(0) > 0.95): 
+                        self.sliderPan.decrement()
+                        self.sliderPan.keyReleased()
                     if(self.j.get_axis(1) < -0.95): 
-                        self.sliderTilt.decrement()
+                        self.sliderTilt.increment()
                         self.sliderTilt.keyReleased()
                     elif(self.j.get_axis(1) > 0.95): 
-                        self.sliderTilt.increment()
+                        self.sliderTilt.decrement()
                         self.sliderTilt.keyReleased()
 
                 elif event.type == pygame.JOYHATMOTION:

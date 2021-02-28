@@ -85,10 +85,10 @@ void loop() {
 
 
 void printSerial(){
- /* Serial.print("---- tilt: ");
+  Serial.print("---- tilt: ");
   Serial.println(tiltValue);
   Serial.print("---- pan: ");
-  Serial.print(panValue);*/
+  Serial.print(panValue);
   Serial.println("---- power: ");
   Serial.print(powerValue);
 }
