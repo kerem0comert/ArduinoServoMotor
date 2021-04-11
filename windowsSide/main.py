@@ -4,7 +4,11 @@ from Socket import Socket
 from tkinter import Tk, Frame, Label, Button, HORIZONTAL, VERTICAL, Scale
 from VideoStreamThread import VideoStreamThread
 from numpy import interp
+<<<<<<< HEAD
 import threading
+=======
+import Joystick
+>>>>>>> e287fe4b2822dd4faeae14290974942d53941305
 
 class PositionSlider(Scale):
     def __init__(self, dataType, connection: socket, master=None, **kwargs):
@@ -20,19 +24,19 @@ class PositionSlider(Scale):
         self.printAngle()
         sendData(self.get(), self.dataType)
 
-    def decrement(self, event):
+    def decrement(self):
         self.set(self.get() - 1)
         self.printAngle()
     
-    def increment(self, event):
+    def increment(self):
         self.set(self.get() + 1)
         self.printAngle()
         
-    def powerDown(self, event):
+    def powerDown(self):
         self.set(self.get() - 1)
         self.printAngle()
         
-    def keyReleased(self, event): 
+    def keyReleased(self): 
         sendData(self.get(), self.dataType)
 
 class App(threading.Thread):
@@ -97,10 +101,19 @@ class App(threading.Thread):
         self.root.bind('<KeyRelease-Down>',self.sliderPan.keyReleased)
         self.root.bind("<KeyRelease-W>", self.sliderPower.keyReleased)
         self.root.bind("<KeyRelease-S>", self.sliderPower.keyReleased)
+    
+    def initJoystick(self):
+        self.j = Joystick.Joystick(app.sliderPan, app.sliderTilt, app.sliderPower)
+        self.j.start()
 
 
+<<<<<<< HEAD
 WINDOWS_HOST = "192.168.1.41"
 STREAM_HOST = 'http://192.168.1.38:8081/'
+=======
+WINDOWS_HOST = "192.168.1.107"
+STREAM_HOST = 'http://192.168.1.34:8081/'
+>>>>>>> e287fe4b2822dd4faeae14290974942d53941305
 RASPBERRY_PORT = 5000
 BAUD_RATE = 9600
 
