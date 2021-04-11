@@ -12,10 +12,9 @@ int counter = 0; //to decode the bytes per position
 int tiltValue, panValue, powerValue;
 const int PAN_PIN = 7;
 const int TILT_PIN = 9;
-//const int pwrInputLow = 11;
-//const int pwrInputHigh = 10;
 const int FORWARD_PIN = 6;
 const int BACKWARD_PIN = 5;
+const int POTENT_PIN = 0;
 
 
 String incomingData;
@@ -25,9 +24,7 @@ char carray1[6]; //magic needed to convert string to a number
 
 void setup() {
   servoTilt.attach(TILT_PIN);  
-  servoPan.attach(PAN_PIN);
-  //pinMode(dcInputLow, OUTPUT); 
-  //pinMode(dcInputHigh, OUTPUT);  
+  servoPan.attach(PAN_PIN); 
   pinMode(FORWARD_PIN, OUTPUT);
   pinMode(BACKWARD_PIN, OUTPUT);
   Serial.begin(BIT_RATE);
@@ -76,19 +73,19 @@ void loop() {
       counter = 0;
     }
 }
-  //digitalWrite(dcInputLow, LOW);
-  //digitalWrite(dcInputHigh,  HIGH);  
-  printSerial();
+
+  //printSerial();
+  Serial.println(analogRead(POTENT_PIN));
   delay(SERVO_DELAY);                           // waits for the servo to get there
 
 }
 
 
 void printSerial(){
-  Serial.print("---- tilt: ");
+ /* Serial.print("---- tilt: ");
   Serial.println(tiltValue);
   Serial.print("---- pan: ");
-  Serial.print(panValue);
+  Serial.print(panValue);*/
   Serial.println("---- power: ");
   Serial.print(powerValue);
 }

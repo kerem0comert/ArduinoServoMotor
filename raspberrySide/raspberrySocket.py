@@ -1,7 +1,7 @@
 import socket, serial
 
 
-WINDOWS_HOST = '192.168.1.107'
+WINDOWS_HOST = '192.168.1.41'
 RASPBERRY_PORT = 5000
 ARDUINO_PORT = '/dev/ttyACM0'
 BAUD_RATE = 9600
@@ -22,7 +22,13 @@ while 1:
         data = data[:DATA_LENGTH]
         print('Data not sent, first data of ' + data + ' is sent.')
     arduinoSerial.write(data.encode()) #serialize the data abd send to arduino
+    potentData = (arduinoSerial.readline()).decode()
+    print(potentData)
+    if(potentData !='\n' and potentData != '\r'):
+        message = potentData
+        #print(message)
     """potentValue = arduinoSerial.read(4)
     print('potentValue = ', potentValue)"""
     
 windowsSocket.close()
+
