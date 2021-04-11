@@ -4,6 +4,7 @@ from Socket import Socket
 from tkinter import Tk, Frame, Label, Button, HORIZONTAL, VERTICAL, Scale
 from VideoStreamThread import VideoStreamThread
 from numpy import interp
+import threading
 
 class PositionSlider(Scale):
     def __init__(self, dataType, connection: socket, master=None, **kwargs):
@@ -34,8 +35,12 @@ class PositionSlider(Scale):
     def keyReleased(self, event): 
         sendData(self.get(), self.dataType)
 
-class App:
+class App(threading.Thread):
     def __init__(self, connection: socket):
+        threading.Thread.__init__(self)
+        self.start()
+
+    def run(self):
         self.canvas = "500x500"
         self.labelFont = ('times', 20, 'bold')
         self.buttonFont = ('times', 10, 'bold')
@@ -46,8 +51,9 @@ class App:
         self.app = Frame(self.root, bg="white")
         self.app.grid()
         self.app.focus_set()
-
-
+        self.initGuiElements()
+        self.root.mainloop()
+        
     def initVideoStream(self, STREAM_HOST):
         # Create a label in the frame
         self.lmain = Label(self.app)
@@ -93,7 +99,7 @@ class App:
         self.root.bind("<KeyRelease-S>", self.sliderPower.keyReleased)
 
 
-WINDOWS_HOST = "192.168.1.107"
+WINDOWS_HOST = "192.168.1.41"
 STREAM_HOST = 'http://192.168.1.38:8081/'
 RASPBERRY_PORT = 5000
 BAUD_RATE = 9600
@@ -115,21 +121,28 @@ def sendData(data, dataType):
     print(toSend)
     connection.send(repr(toSend).encode('utf-8'))
 
-
-socketInstance = Socket(WINDOWS_HOST, RASPBERRY_PORT)
-
-print("Listening...")
-connection, address = socketInstance.startListening()
-print (f"Connection from: {str(address)}")
-app = App(connection)
-app.initVideoStream(STREAM_HOST)
-
-while 1:
-    app.initGuiElements()
+def receiveData(connection):
+    print("test")
     data = connection.recv(BAUD_RATE).decode()
-    if not data: break 
+    print(data)
+    if not data: exit()
     print(f"From raspberry pi: {str(data)}")
-    app.root.mainloop()
-connection.close()
+
+def __init__ == "__main__":
+    socketInstance = Socket(WINDOWS_HOST, RASPBERRY_PORT)
+
+    print("Listening...")
+    connection, address = socketInstance.startListening()
+    print (f"Connection from: {str(address)}")
+    app = App(connection)
+    #app.initVideoStream(STREAM_HOST)
+
+    while 1:
+        data = connection.recv(BAUD_RATE).decode()
+        print(data)
+        if not data: exit()
+        print(f"From raspberry pi: {str(data)}")
+
+    connection.close()
 
 
