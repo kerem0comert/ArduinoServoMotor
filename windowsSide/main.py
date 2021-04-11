@@ -4,11 +4,8 @@ from Socket import Socket
 from tkinter import Tk, Frame, Label, Button, HORIZONTAL, VERTICAL, Scale
 from VideoStreamThread import VideoStreamThread
 from numpy import interp
-<<<<<<< HEAD
 import threading
-=======
-import Joystick
->>>>>>> e287fe4b2822dd4faeae14290974942d53941305
+from time import sleep
 
 class PositionSlider(Scale):
     def __init__(self, dataType, connection: socket, master=None, **kwargs):
@@ -84,6 +81,9 @@ class App(threading.Thread):
         self.sliderPower.grid(row=1, column=2)
         self.sliderPower.set(0)
 
+        self.lblPotent = Label(self.root, text="PotentValue: ") 
+        self.lblPotent.grid(row=2,column=0)
+
         """buttonReset = Button(root, text='Reset To Origin',
                             command=self.resetSlider, bg='red', fg='#fff')
         buttonReset.config(font=buttonFont)
@@ -107,13 +107,8 @@ class App(threading.Thread):
         self.j.start()
 
 
-<<<<<<< HEAD
 WINDOWS_HOST = "192.168.1.41"
 STREAM_HOST = 'http://192.168.1.38:8081/'
-=======
-WINDOWS_HOST = "192.168.1.107"
-STREAM_HOST = 'http://192.168.1.34:8081/'
->>>>>>> e287fe4b2822dd4faeae14290974942d53941305
 RASPBERRY_PORT = 5000
 BAUD_RATE = 9600
 
@@ -134,14 +129,9 @@ def sendData(data, dataType):
     print(toSend)
     connection.send(repr(toSend).encode('utf-8'))
 
-def receiveData(connection):
-    print("test")
-    data = connection.recv(BAUD_RATE).decode()
-    print(data)
-    if not data: exit()
-    print(f"From raspberry pi: {str(data)}")
 
-def __init__ == "__main__":
+
+if __name__ == "__main__":
     socketInstance = Socket(WINDOWS_HOST, RASPBERRY_PORT)
 
     print("Listening...")
@@ -150,12 +140,15 @@ def __init__ == "__main__":
     app = App(connection)
     #app.initVideoStream(STREAM_HOST)
 
+    #Wait for GUI thread to initialize the GUI elements, before receiving data.
+    #Otherwise, lblPotent object does not exist so its text cannot be changed.
+    sleep(0.5)
     while 1:
         data = connection.recv(BAUD_RATE).decode()
         print(data)
         if not data: exit()
         print(f"From raspberry pi: {str(data)}")
-
+        app.lblPotent.config(text=f"Potent Value: {str(data)}")
     connection.close()
 
 
