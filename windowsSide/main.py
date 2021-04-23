@@ -6,6 +6,7 @@ from VideoStreamThread import VideoStreamThread
 from numpy import interp
 import threading
 from time import sleep
+from Joystick import Joystick
 
 class PositionSlider(Scale):
     def __init__(self, dataType, connection: socket, master=None, **kwargs):
@@ -53,6 +54,7 @@ class App(threading.Thread):
         self.app.grid()
         self.app.focus_set()
         self.initGuiElements()
+        self.initJoystick()
         self.root.mainloop()
         
     def initVideoStream(self, STREAM_HOST):
@@ -103,12 +105,12 @@ class App(threading.Thread):
         self.root.bind("<KeyRelease-S>", self.sliderPower.keyReleased)
     
     def initJoystick(self):
-        self.j = Joystick.Joystick(app.sliderPan, app.sliderTilt, app.sliderPower)
+        self.j = Joystick(app.sliderPan, app.sliderTilt, app.sliderPower)
         self.j.start()
 
 
 WINDOWS_HOST = "192.168.1.41"
-STREAM_HOST = 'http://192.168.1.38:8081/'
+STREAM_HOST = 'http://192.168.1.46:8081/'
 RASPBERRY_PORT = 5000
 BAUD_RATE = 9600
 

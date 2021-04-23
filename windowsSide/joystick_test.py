@@ -3,14 +3,10 @@ import threading
 #import main
 
 class Joystick(threading.Thread):
-    def __init__(self, sliderPan, sliderTilt, sliderPower):
+    def __init__(self):
         threading.Thread.__init__(self)
-        self.sliderPan = sliderPan
-        self.sliderTilt = sliderTilt
-        self.sliderPower = sliderPower
         pygame.init()
         self.j = pygame.joystick.Joystick(0)
-        self.j.init()
         print (f"init: {self.j.get_init()}")
         print (f"id: {self.j.get_id()}")
         print (self.j.get_name())
@@ -33,20 +29,18 @@ class Joystick(threading.Thread):
                     print(f"Left-right: {self.j.get_axis(0)}") #left -1 / right 1
                     print(f"Up-down: {self.j.get_axis(1)}")  #power up -1 / power down 1"""
                     if(self.j.get_axis(0) < -0.95): 
-                        self.sliderPan.increment()
-                        self.sliderPan.keyReleased()
+                        print("axis y")
                     elif(self.j.get_axis(0) > 0.95): 
-                        self.sliderPan.decrement()
-                        self.sliderPan.keyReleased()
+                       print("axis l")
                     if(self.j.get_axis(1) < -0.95): 
-                        self.sliderTilt.increment()
-                        self.sliderTilt.keyReleased()
+                        print("y")
                     elif(self.j.get_axis(1) > 0.95): 
-                        self.sliderTilt.decrement()
-                        self.sliderTilt.keyReleased()
+                       print("z")
 
                 elif event.type == pygame.JOYHATMOTION:
                     print(f"X: {self.j.get_hat(0)[0]}") #left hat -1 /right hat 1 
                     print(f"Y: {self.j.get_hat(0)[1]}") #down hat -1 / right hat 1
 
-              
+
+j = Joystick()
+j.start()

@@ -21,12 +21,14 @@ while 1:
     if len(data) > DATA_LENGTH:
         data = data[:DATA_LENGTH]
         print('Data not sent, first data of ' + data + ' is sent.')
-    arduinoSerial.write(data.encode()) #serialize the data abd send to arduino
-    potentData = (arduinoSerial.readline()).decode()
-    print(potentData)
-    if(potentData !='\n' and potentData != '\r'):
-        message = potentData
-        #print(message)
+    try:
+        arduinoSerial.write(data.encode()) #serialize the data abd send to arduino
+        potentData = (arduinoSerial.readline()).decode()
+        print(potentData)
+        if(potentData !='\n' and potentData != '\r'):
+            message = potentData
+            print("Arduino: " + message)
+    except SerialException: continue
     """potentValue = arduinoSerial.read(4)
     print('potentValue = ', potentValue)"""
     
