@@ -1,4 +1,5 @@
 #include <Servo.h>
+#include <ctype.h>
 
 Servo servoTilt; 
 Servo servoPan; 
@@ -35,43 +36,39 @@ void setup() {
 void loop() {
   if(Serial.available()){ 
       readChar = Serial.read();    //From RPi to Arduino
-      Serial.println("read: " + readChar);
-       incomingData += readChar;
-      if(incomingData.length() == 6) {
-        operateOnData();
+      if(isAlpha(readChar)){
+        operateOnData(readChar);
         incomingData = "";
+      }else incomingData += readChar; 
     }
-  }
 }
 
-void operateOnData(){
-  String incomingValue = incomingData.substring(1,4);
-  char incomingType = incomingData[4];
-  Serial.println("Position value: " + incomingValue + " Data type: " + incomingType);
-  incomingValue.toCharArray(intValue, sizeof(intValue));
-  if(incomingType == 't'){
-    tiltValue = atoi(intValue); 
-    servoTilt.write(tiltValue); // sets the servo position according to the scaled value
-  }else if(incomingType == 'p'){
-    panValue = atoi(intValue);
+void operateOnData(char readChar){
+  //String incomingValue = incomingData.substring(1,incomingData.length()-1);
+  if(readChar == 't'){
+    tiltValue = incomingData.toInt(); 
+    servoTilt.write(tiltValue);
+  }else if(readChar == 'p'){
+    panValue = incomingData.toInt(); 
     servoPan.write(panValue);
-  }else if(incomingType == 'w'){
-    powerValue = atoi(intValue);
+  }else if(readChar == 'w'){
+    powerValue = incomingData.toInt(); 
     analogWrite(BACKWARD_PIN, 0);
     analogWrite(FORWARD_PIN,  powerValue);   //powerValue
-  }else if(incomingType == 's'){
-    powerValue = atoi(intValue);
+  }else if(readChar == 's'){
+    powerValue = incomingData.toInt(); 
     analogWrite(FORWARD_PIN, 0);
     analogWrite(BACKWARD_PIN, powerValue);
   }
+   printSerial();
 }
 
 
 void printSerial(){
- /* Serial.print("---- tilt: ");
+  Serial.print("---- tilt: ");
   Serial.println(tiltValue);
   Serial.print("---- pan: ");
-  Serial.print(panValue);*/
+  Serial.print(panValue);
   Serial.println("---- power: ");
   Serial.print(powerValue);
 }

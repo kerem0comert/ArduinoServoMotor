@@ -3,7 +3,7 @@ import socket, serial, re, time
 
 WINDOWS_HOST = '192.168.1.41'
 RASPBERRY_PORT = 5000
-ARDUINO_PORT = '/dev/ttyACM3'
+ARDUINO_PORT = '/dev/ttyACM7'
 BAUD_RATE = 9600
 DATA_LENGTH = 6
 
@@ -21,10 +21,9 @@ while 1:
     noQuotes = re.sub(r'\W+', '', data)
     commandsList = [noQuotes[i:i+4] for i in range(0, len(noQuotes), 4)]
     for command in commandsList:
-        command += '*'
         arduinoSerial.write(command.encode()) #serialize the data abd send to arduino
-        time.sleep(4)
         print("sent to arduino: " + command)
+
 
     """potentValue = arduinoSerial.read(4)
     print('potentValue = ', potentValue)"""
