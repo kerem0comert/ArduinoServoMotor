@@ -36,7 +36,7 @@ class Joystick(threading.Thread):
             self.sliderPan.keyReleased()
 
             # Make this loop work at update_rate
-            while elapsed < 0.3:
+            while elapsed < 0.1:
                 elapsed = time.time() - current
 
             
