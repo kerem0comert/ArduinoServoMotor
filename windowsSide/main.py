@@ -36,7 +36,7 @@ class PositionSlider(Scale):
         
     def keyReleased(self): 
         sendData(self.get(), self.dataType)
-    def sendArbitraryData(data): connection.send(data).encode('utf-8')
+
 
 class App(threading.Thread):
     def __init__(self, connection: socket):
@@ -152,11 +152,11 @@ if __name__ == "__main__":
     #Otherwise, lblPotent object does not exist so its text cannot be changed.
     sleep(0.5)
     while 1:
-        data = connection.recv(BAUD_RATE).decode()
+        data = connection.recv(BAUD_RATE).decode('utf-8', 'ignore')
         #print(data)
         if not data: exit()
-        #print(f"From raspberry pi: {str(data)}")
-        app.lblPotent.config(text=f"Potent Value: {str(data)}")
+        print(f"From raspberry pi: {data}")
+        app.lblPotent.config(text=f"Potent Value: {data}")
     connection.close()
 
 

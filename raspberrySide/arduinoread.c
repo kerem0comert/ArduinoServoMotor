@@ -20,6 +20,7 @@ const int POTENT_PIN = 0;
 
 String incomingData;
 String positionString;
+int potentValue;
 char readChar;
 char intValue[6]; //magic needed to convert string to a number 
 boolean seenFirstQuote = false;
@@ -41,6 +42,8 @@ void loop() {
         incomingData = "";
       }else incomingData += readChar; 
     }
+    potentValue = analogRead(POTENT_PIN);
+    Serial.write(potentValue);
 }
 
 void operateOnData(char readChar){
@@ -60,7 +63,9 @@ void operateOnData(char readChar){
     analogWrite(FORWARD_PIN, 0);
     analogWrite(BACKWARD_PIN, powerValue);
   }
-   printSerial();
+  
+   //Serial.println(potentValue);
+   //printSerial();
 }
 
 
