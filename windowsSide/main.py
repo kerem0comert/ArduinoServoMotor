@@ -36,6 +36,7 @@ class PositionSlider(Scale):
         
     def keyReleased(self): 
         sendData(self.get(), self.dataType)
+    def sendArbitraryData(data): connection.send(data).encode('utf-8')
 
 class App(threading.Thread):
     def __init__(self, connection: socket):
@@ -129,7 +130,10 @@ def sendData(data, dataType, ):
     
     toSend = str(data) + str(dataType)
     print(toSend)
-    connection.send(repr(toSend).encode('utf-8'))
+    connection.send((toSend).encode('utf-8'))
+
+
+
 
 
 

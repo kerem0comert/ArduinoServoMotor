@@ -24,21 +24,20 @@ class Joystick(threading.Thread):
 
 
     def run(self):
-        x = 0
-        while 1:
-            #
-            # EVENT PROCESSING STEP
-            #
-            # Possible joystick actions: JOYAXISMOTION, JOYBALLMOTION, JOYBUTTONDOWN,
-            # JOYBUTTONUP, JOYHATMOTION
-            for index, event in enumerate(pygame.event.get()): # User did something.          
-                print(f"Left-right: {self.j.get_axis(0)}") #left -1 / right 1
-                print(f"Up-down: {self.j.get_axis(1)}")  #power up -1 / power down 1
-                if index % 20 == 0:
-                    self.sliderTilt.set(int(interp(self.j.get_axis(0), [-1,1], [-90,90])))     
-                    self.sliderPan.set(int(interp(self.j.get_axis(1), [-1,1], [-30,90])))
-                    self.sliderTilt.keyReleased()  
-                    self.sliderPan.keyReleased()
+        while True:
+            current = time.time()
+            elapsed = 0
+            
+            # Joystick reading
+            pygame.event.pump()
+            self.sliderTilt.set(int(interp(self.j.get_axis(0), [-1,1], [-90,90])))     
+            self.sliderPan.set(int(interp(self.j.get_axis(1), [-1,1], [-30,90])))
+            self.sliderTilt.keyReleased()  
+            self.sliderPan.keyReleased()
+
+            # Make this loop work at update_rate
+            while elapsed < 0.3:
+                elapsed = time.time() - current
 
             
 

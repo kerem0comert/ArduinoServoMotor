@@ -67,7 +67,7 @@ void operateOnData(char readChar){
 void printSerial(){
   Serial.print("---- tilt: ");
   Serial.println(tiltValue);
-  Serial.print("---- pan: ");
+  Serial.println("---- pan: ");
   Serial.print(panValue);
   Serial.println("---- power: ");
   Serial.print(powerValue);
