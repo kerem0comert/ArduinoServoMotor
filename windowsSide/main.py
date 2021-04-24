@@ -54,7 +54,7 @@ class App(threading.Thread):
         self.app.grid()
         self.app.focus_set()
         self.initGuiElements()
-        self.initJoystick()
+        #self.initJoystick()
         self.root.mainloop()
         
     def initVideoStream(self, STREAM_HOST):
@@ -130,6 +130,7 @@ def sendData(data, dataType):
     toSend = str(data) + str(dataType)
     print(toSend)
     connection.send(repr(toSend).encode('utf-8'))
+    sleep(0.25)
 
 
 
@@ -147,9 +148,9 @@ if __name__ == "__main__":
     sleep(0.5)
     while 1:
         data = connection.recv(BAUD_RATE).decode()
-        print(data)
+        #print(data)
         if not data: exit()
-        print(f"From raspberry pi: {str(data)}")
+        #print(f"From raspberry pi: {str(data)}")
         app.lblPotent.config(text=f"Potent Value: {str(data)}")
     connection.close()
 

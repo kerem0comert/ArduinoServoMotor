@@ -6,7 +6,7 @@ Servo servoPan;
 char dataType; //'t', 'p', 'w', 's'
 
 const int BIT_RATE =  9600;
-const int SERVO_DELAY = 35;
+const int SERVO_DELAY = 24;
 int counter = 0; //to decode the bytes per position
 
 int tiltValue, panValue, powerValue;
@@ -21,6 +21,7 @@ String incomingData;
 String positionString;
 char readChar;
 char intValue[6]; //magic needed to convert string to a number 
+boolean seenFirstQuote = false;
 
 void setup() {
   servoTilt.attach(TILT_PIN);  
@@ -34,11 +35,12 @@ void setup() {
 void loop() {
   if(Serial.available()){ 
       readChar = Serial.read();    //From RPi to Arduino
-      if(readChar == '*') {
-        //Serial.println(incomingData);
+      Serial.println("read: " + readChar);
+       incomingData += readChar;
+      if(incomingData.length() == 6) {
         operateOnData();
-      }
-      else incomingData += readChar; //append each byte
+        incomingData = "";
+    }
   }
 }
 
@@ -46,7 +48,6 @@ void operateOnData(){
   String incomingValue = incomingData.substring(1,4);
   char incomingType = incomingData[4];
   Serial.println("Position value: " + incomingValue + " Data type: " + incomingType);
-  incomingData = "";
   incomingValue.toCharArray(intValue, sizeof(intValue));
   if(incomingType == 't'){
     tiltValue = atoi(intValue); 

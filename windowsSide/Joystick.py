@@ -1,5 +1,7 @@
 import pygame
 import threading
+from numpy import interp
+import time
 #import main
 
 class Joystick(threading.Thread):
@@ -22,6 +24,7 @@ class Joystick(threading.Thread):
 
 
     def run(self):
+        repeater = 0
         while 1:
             #
             # EVENT PROCESSING STEP
@@ -29,24 +32,19 @@ class Joystick(threading.Thread):
             # Possible joystick actions: JOYAXISMOTION, JOYBALLMOTION, JOYBUTTONDOWN,
             # JOYBUTTONUP, JOYHATMOTION
             for event in pygame.event.get(): # User did something.
-                if event.type == pygame.JOYAXISMOTION:
-                    print(f"Left-right: {self.j.get_axis(0)}") #left -1 / right 1
-                    print(f"Up-down: {self.j.get_axis(1)}")  #power up -1 / power down 1"""
-                    if(self.j.get_axis(0) < -0.95): 
-                        self.sliderPan.increment()
-                        self.sliderPan.keyReleased()
-                    elif(self.j.get_axis(0) > 0.95): 
-                        self.sliderPan.decrement()
-                        self.sliderPan.keyReleased()
-                    if(self.j.get_axis(1) < -0.95): 
-                        self.sliderTilt.increment()
-                        self.sliderTilt.keyReleased()
-                    elif(self.j.get_axis(1) > 0.95): 
-                        self.sliderTilt.decrement()
-                        self.sliderTilt.keyReleased()
+                print(f"Left-right: {self.j.get_axis(0)}") #left -1 / right 1
+                print(f"Up-down: {self.j.get_axis(1)}")  #power up -1 / power down 1
 
-                elif event.type == pygame.JOYHATMOTION:
+                """elif event.type == pygame.JOYHATMOTION:
                     print(f"X: {self.j.get_hat(0)[0]}") #left hat -1 /right hat 1 
                     print(f"Y: {self.j.get_hat(0)[1]}") #down hat -1 / right hat 1
+                    repeater = 0"""
+                
+                self.sliderTilt.set(int(interp(self.j.get_axis(0), [-1,1], [-90,90])))     
+                self.sliderPan.set(int(interp(self.j.get_axis(1), [-1,1], [-30,90])))
+                self.sliderTilt.keyReleased()  
+                self.sliderPan.keyReleased()
+
+            
 
               
