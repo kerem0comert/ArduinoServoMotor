@@ -54,7 +54,7 @@ class App(threading.Thread):
         self.app.grid()
         self.app.focus_set()
         self.initGuiElements()
-        #self.initJoystick()
+        self.initJoystick()
         self.root.mainloop()
         
     def initVideoStream(self, STREAM_HOST):
@@ -115,13 +115,13 @@ RASPBERRY_PORT = 5000
 BAUD_RATE = 9600
 
 
-def sendData(data, dataType):
+def sendData(data, dataType, ):
     if dataType == 't': data = int(interp(data, [-90,90], [180,0]))
     elif dataType == 'p': data = int(interp(data, [-30,90], [120,0]))
     else: 
         if data < 0: dataType = 's' #in the case of 'w' datatype, a negative value will indicate 's' for backwards
         data =  int(interp(abs(data), [0,100], [40,255]))
- 
+
     #make sure data has 3 digits
     if(data < 10): data = "00" + str(data)
     elif(data < 100): data = "0" + str(data)
@@ -130,7 +130,8 @@ def sendData(data, dataType):
     toSend = str(data) + str(dataType)
     print(toSend)
     connection.send(repr(toSend).encode('utf-8'))
-    sleep(0.25)
+
+
 
 
 
