@@ -3,7 +3,7 @@ import socket, serial, re, time
 
 WINDOWS_HOST = '192.168.1.41'
 RASPBERRY_PORT = 5000
-ARDUINO_PORT = '/dev/ttyACM1'
+ARDUINO_PORT = '/dev/ttyACM4'
 BAUD_RATE = 4
 DATA_LENGTH = 6
 

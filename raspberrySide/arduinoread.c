@@ -30,7 +30,7 @@ void setup() {
   pinMode(FORWARD_PIN, OUTPUT);
   pinMode(BACKWARD_PIN, OUTPUT);
   Serial.begin(BIT_RATE);
-
+  //delay(100);
 }
 
 void loop() {
