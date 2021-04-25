@@ -42,11 +42,11 @@ void loop() {
         incomingData = "";
       }else incomingData += readChar; 
     }
-    potentValue = analogRead(POTENT_PIN);
-    Serial.write(potentValue);
+    //delay(100);
 }
 
 void operateOnData(char readChar){
+  int start = millis();
   //String incomingValue = incomingData.substring(1,incomingData.length()-1);
   if(readChar == 't'){
     tiltValue = incomingData.toInt(); 
@@ -63,7 +63,8 @@ void operateOnData(char readChar){
     analogWrite(FORWARD_PIN, 0);
     analogWrite(BACKWARD_PIN, powerValue);
   }
-  
+  potentValue = analogRead(POTENT_PIN);
+  Serial.println(potentValue);
    //Serial.println(potentValue);
    //printSerial();
 }
