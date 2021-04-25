@@ -55,6 +55,7 @@ class App(threading.Thread):
         self.app.grid()
         self.app.focus_set()
         self.initGuiElements()
+        self.initVideoStream(STREAM_HOST)
         self.initJoystick()
         self.root.mainloop()
         
@@ -146,11 +147,10 @@ if __name__ == "__main__":
     connection, address = socketInstance.startListening()
     print (f"Connection from: {str(address)}")
     app = App(connection)
-    #app.initVideoStream(STREAM_HOST)
 
     #Wait for GUI thread to initialize the GUI elements, before receiving data.
     #Otherwise, lblPotent object does not exist so its text cannot be changed.
-    sleep(0.5)
+    sleep(1)
     while 1:
         data = connection.recv(BAUD_RATE).decode('utf-8', 'ignore')
         #print(data)

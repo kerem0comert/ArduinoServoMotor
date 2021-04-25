@@ -28,8 +28,6 @@ while 1:
             break
         except: pass
     arduinoSerial.flush()
-
-                            
-    
+ 
 windowsSocket.close()
 

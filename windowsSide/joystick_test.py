@@ -25,22 +25,17 @@ class Joystick(threading.Thread):
             # Possible joystick actions: JOYAXISMOTION, JOYBALLMOTION, JOYBUTTONDOWN,
             # JOYBUTTONUP, JOYHATMOTION
             for event in pygame.event.get(): # User did something.
-                if event.type == pygame.JOYAXISMOTION:
-                    print(f"Left-right: {self.j.get_axis(0)}") #left -1 / right 1
-                    print(f"Up-down: {self.j.get_axis(1)}")  #power up -1 / power down 1"""
-                    if(self.j.get_axis(0) < -0.95): 
-                        print("axis y")
-                    elif(self.j.get_axis(0) > 0.95): 
-                       print("axis l")
-                    if(self.j.get_axis(1) < -0.95): 
-                        print("y")
-                    elif(self.j.get_axis(1) > 0.95): 
-                       print("z")
-
-                elif event.type == pygame.JOYHATMOTION:
+                if event.type == pygame.JOYAXISMOTION: print("axis")
+                if event.type == pygame.JOYHATMOTION:
                     print(f"X: {self.j.get_hat(0)[0]}") #left hat -1 /right hat 1 
                     print(f"Y: {self.j.get_hat(0)[1]}") #down hat -1 / right hat 1
 
+                if event.type == pygame.JOYBALLMOTION: print("ball")
+                if event.type == pygame.JOYBUTTONDOWN: 
+                    print("buttondown")
+                if event.type == pygame.JOYBUTTONUP: print("buttonup")
 
+
+                
 j = Joystick()
 j.start()
