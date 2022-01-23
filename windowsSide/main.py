@@ -13,6 +13,7 @@ class PositionSlider(Scale):
         self.dataType = dataType
         self.bind("<ButtonRelease-1>", self.updateValue)
         self.connection = connection
+        self.set(0)
     
     def printAngle(self): print("Angle = ", self.get(), " ", self.dataType)
 
@@ -36,17 +37,17 @@ class PositionSlider(Scale):
         sendData(self.get(), self.dataType)
 
 class App:
-    def __init__(self, connection: socket):
-        self.canvas = "500x500"
+    def __init__(self, connection: socket = None):
+        self.canvas = "800x800"
         self.labelFont = ('times', 20, 'bold')
         self.buttonFont = ('times', 10, 'bold')
         self.root = Tk()
         self.root.geometry(self.canvas)
+        self.root.grid()
+        self.root.rowconfigure(2, minsize=30)
+        self.root.columnconfigure(2, minsize=30)
+        self.root.focus_set()
         self.connection = connection
-        # Create a frame
-        self.app = Frame(self.root, bg="white")
-        self.app.grid()
-        self.app.focus_set()
 
 
     def initVideoStream(self, STREAM_HOST):
@@ -55,25 +56,34 @@ class App:
         self.lmain.grid(row=0, column=1)
         self.videoStream = VideoStreamThread(self.lmain, STREAM_HOST)
         self.videoStream.start()
-
+        
     def initGuiElements(self):
+        self.bMainMenu = Button(self.root, text="Main Menu")
+        self.bMainMenu.grid(row=0, column=0)
+        
+        self.bSecondPage = Button(self.root, text="Second Page")
+        self.bSecondPage.grid(row=0, column=1)
+        
+        self.bThirdPage = Button(self.root, text="Third Page")
+        self.bThirdPage.grid(row=0, column=2)
+        
+        self.bFourthPage = Button(self.root, text="Fourth Page")
+        self.bFourthPage.grid(row=0, column=3)
+        
         self.sliderTilt = PositionSlider('t', self.root, 
                                     from_=-90, to=90, tickinterval=20,
                                    orient=HORIZONTAL, troughcolor='grey', length=200)
         self.sliderTilt.grid(row=1, column=0)
-        self.sliderTilt.set(0)
 
         self.sliderPan = PositionSlider('p', self.root, 
                                     from_=90, to=-30, tickinterval=5,
                                     orient=VERTICAL, troughcolor='grey', length=200, showvalue=0)  
         self.sliderPan.grid(row=1, column=1)
-        self.sliderPan.set(0)
 
         self.sliderPower = PositionSlider('w', self.root, 
                                     from_=100, to=-100, tickinterval=20,
                                     orient=VERTICAL, troughcolor='green', length=200, showvalue=0)  
         self.sliderPower.grid(row=1, column=2)
-        self.sliderPower.set(0)
 
         """buttonReset = Button(root, text='Reset To Origin',
                             command=self.resetSlider, bg='red', fg='#fff')
@@ -121,21 +131,21 @@ def sendData(data, dataType):
     connection.send(repr(toSend).encode('utf-8'))
 
 
-socketInstance = Socket(WINDOWS_HOST, RASPBERRY_PORT)
+#socketInstance = Socket(WINDOWS_HOST, RASPBERRY_PORT)
 
 print("Listening...")
-connection, address = socketInstance.startListening()
-print (f"Connection from: {str(address)}")
-app = App(connection)
-app.initVideoStream(STREAM_HOST)
+#connection, address = socketInstance.startListening()
+#print (f"Connection from: {str(address)}")
+app = App()
+#app.initVideoStream(STREAM_HOST)
 
 while 1:
     app.initGuiElements()
-    #app.initJoystick()
+    """app.initJoystick()
     data = connection.recv(BAUD_RATE).decode()
     if not data: break 
-    print(f"From raspberry pi: {str(data)}")
+    print(f"From raspberry pi: {str(data)}")"""
     app.root.mainloop()
-connection.close()
+#connection.close()
 
 
