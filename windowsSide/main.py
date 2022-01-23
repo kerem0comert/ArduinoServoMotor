@@ -4,7 +4,9 @@ from Socket import Socket
 from tkinter import Tk, Frame, Label, Button, HORIZONTAL, VERTICAL, Scale
 from VideoStreamThread import VideoStreamThread
 from numpy import interp
-import Joystick
+import threading
+from time import sleep
+from Joystick import Joystick
 
 class PositionSlider(Scale):
     def __init__(self, dataType, connection: socket, master=None, **kwargs):
@@ -85,6 +87,9 @@ class App:
                                     orient=VERTICAL, troughcolor='green', length=200, showvalue=0)  
         self.sliderPower.grid(row=1, column=2)
 
+        self.lblPotent = Label(self.root, text="PotentValue: ") 
+        self.lblPotent.grid(row=2,column=0)
+
         """buttonReset = Button(root, text='Reset To Origin',
                             command=self.resetSlider, bg='red', fg='#fff')
         buttonReset.config(font=buttonFont)
@@ -104,23 +109,23 @@ class App:
         self.root.bind("<KeyRelease-S>", self.sliderPower.keyReleased)
     
     def initJoystick(self):
-        self.j = Joystick.Joystick(app.sliderPan, app.sliderTilt, app.sliderPower)
+        self.j = Joystick(app.sliderPan, app.sliderTilt, app.sliderPower)
         self.j.start()
 
 
-WINDOWS_HOST = "192.168.1.107"
-STREAM_HOST = 'http://192.168.1.34:8081/'
+WINDOWS_HOST = "192.168.1.41"
+STREAM_HOST = 'http://192.168.1.46:8081/'
 RASPBERRY_PORT = 5000
 BAUD_RATE = 9600
 
 
-def sendData(data, dataType):
+def sendData(data, dataType, ):
     if dataType == 't': data = int(interp(data, [-90,90], [180,0]))
     elif dataType == 'p': data = int(interp(data, [-30,90], [120,0]))
     else: 
         if data < 0: dataType = 's' #in the case of 'w' datatype, a negative value will indicate 's' for backwards
         data =  int(interp(abs(data), [0,100], [40,255]))
- 
+
     #make sure data has 3 digits
     if(data < 10): data = "00" + str(data)
     elif(data < 100): data = "0" + str(data)
@@ -128,7 +133,13 @@ def sendData(data, dataType):
     
     toSend = str(data) + str(dataType)
     print(toSend)
-    connection.send(repr(toSend).encode('utf-8'))
+    connection.send((toSend).encode('utf-8'))
+
+
+
+
+
+
 
 
 #socketInstance = Socket(WINDOWS_HOST, RASPBERRY_PORT)

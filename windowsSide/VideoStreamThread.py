@@ -11,6 +11,7 @@ class VideoStreamThread(threading.Thread):
         if cv2.waitKey(1) == 27: exit(0)
 
     def run(self):
+        print("i am running")
         returnValue, frame = self.stream.read()
         if returnValue: 
             cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
@@ -18,4 +19,4 @@ class VideoStreamThread(threading.Thread):
             imgtk = ImageTk.PhotoImage(image=img)
             self.lmain.imgtk = imgtk
             self.lmain.configure(image=imgtk)
-            self.lmain.after(3, self.run) 
+            self.lmain.after(1000, self.run) 
