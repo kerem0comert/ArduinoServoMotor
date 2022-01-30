@@ -26,7 +26,7 @@ class PositionSlider(QtWidgets.QSlider):
         
     def updateValue(self):
         self.printAngle()
-        sendData(self.value())
+        sendData(self.value(), self.dataType)
     
     def printAngle(self): print(f"Angle = {self.value()} {self.dataType}")
         
@@ -130,8 +130,8 @@ class Ui_MainWindow(object):
     def initJoystick(self): pass
 
 
-WINDOWS_HOST = "192.168.1.107"
-STREAM_HOST = 'http://192.168.1.34:8081/'
+WINDOWS_HOST = "192.168.1.41"
+STREAM_HOST = 'http://192.168.1.46:8081/'
 RASPBERRY_PORT = 5000
 BAUD_RATE = 9600
 
@@ -143,11 +143,7 @@ def sendData(data, dataType):
         data =  int(interp(abs(data), [0,100], [40,255]))
  
     #make sure data has 3 digits
-    if(data < 10): data = "00" + str(data)
-    elif(data < 100): data = "0" + str(data)
-    else:  data = str(data)
-    
-    toSend = str(data) + str(dataType)
+    toSend = str(data).rjust(3, '0') + dataType
     print(toSend)
     connection.send(repr(toSend).encode('utf-8'))
 
@@ -164,11 +160,10 @@ if __name__ == "__main__":
     MainWindow.show()
     #app.initVideoStream(STREAM_HOST)
     while 1:
-        app.initJoystick()
+        #app.initJoystick()
         data = connection.recv(BAUD_RATE).decode()
         if not data: break 
         print(f"From raspberry pi: {str(data)}")
-        app.root.mainloop()
     connection.close()
     sys.exit(app.exec_())
     
