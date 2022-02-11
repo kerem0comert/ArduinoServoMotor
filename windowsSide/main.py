@@ -7,6 +7,13 @@ import threading
 from time import sleep
 from Joystick import Joystick
 
+DATA_TYPES = {
+    "TILT_CAMERA": "t",
+    "PAN_CAMERA": "p",
+    "STEER": "e",
+    "POWER": "w",  # or it will be dynamically adjusted to 's', if data < 0
+}
+
 
 class PositionSlider(Scale):
     def __init__(self, dataType, connection: socket, master=None, **kwargs):
@@ -145,17 +152,19 @@ def sendData(
     data,
     dataType,
 ):
-    if dataType == "t":
+    if dataType == DATA_TYPES["TILT_CAMERA"]:
         data = int(interp(data, [-90, 90], [180, 0]))
-    elif dataType == "p":
+    elif dataType == DATA_TYPES["PAN_CAMERA"]:
         data = int(interp(data, [-30, 90], [120, 0]))
-    else:
+    elif dataType == DATA_TYPES["POWER"]:
         if data < 0:
             dataType = "s"  # in the case of 'w' datatype, a negative value will indicate 's' for backwards
         data = int(interp(abs(data), [0, 100], [40, 255]))
+    elif dataType == DATA_TYPES["STEER"]:
+        pass
 
     # make sure data has 3 digits
-    toSend = str(data).rjust(3, '0') + dataType
+    toSend = str(data).rjust(3, "0") + dataType
 
     toSend = str(data) + str(dataType)
     print(toSend)
