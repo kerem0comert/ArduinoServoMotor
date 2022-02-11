@@ -155,12 +155,7 @@ def sendData(
         data = int(interp(abs(data), [0, 100], [40, 255]))
 
     # make sure data has 3 digits
-    if data < 10:
-        data = "00" + str(data)
-    elif data < 100:
-        data = "0" + str(data)
-    else:
-        data = str(data)
+    toSend = str(data).rjust(3, '0') + dataType
 
     toSend = str(data) + str(dataType)
     print(toSend)
