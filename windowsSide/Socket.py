@@ -8,7 +8,7 @@ class Socket:
         )
         self.mySocket.bind((WINDOWS_HOST, RASPBERRY_PORT))
 
-    def startListening(self):
+    def start_listening(self):
         self.mySocket.listen(1)
         return self.mySocket.accept()
 

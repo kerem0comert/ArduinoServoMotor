@@ -8,12 +8,12 @@ Servo svSteer;
 const int BIT_RATE = 9600;
 const int SERVO_DELAY = 24;
 
-const int PIN_PAN_CAMERA = 7;
-const int PIN_TILT_CAMERA = 9;
-const int PIN_STEER = 1000;
-const int PIN_POWER_FORWARD = 6;
-const int PIN_POWER_BACKWARD = 5;
 const int PIN_POTENT = 0;
+const int PIN_POWER_BACKWARD = 5;
+const int PIN_POWER_FORWARD = 6;
+const int PIN_PAN_CAMERA = 7;
+const int PIN_TILT_CAMERA = 8;
+const int PIN_STEER = 9;
 
 // Data types
 const char STEER = 'e';

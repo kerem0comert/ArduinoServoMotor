@@ -7,6 +7,10 @@ import threading
 from time import sleep
 from Joystick import Joystick
 
+WINDOWS_HOST = "192.168.1.41"
+STREAM_HOST = "http://192.168.1.46:8081/"
+RASPBERRY_PORT = 5000
+BAUD_RATE = 9600
 DATA_TYPES = {
     "TILT_CAMERA": "t",
     "PAN_CAMERA": "p",
@@ -16,34 +20,34 @@ DATA_TYPES = {
 
 
 class PositionSlider(Scale):
-    def __init__(self, dataType, connection: socket, master=None, **kwargs):
+    def __init__(self, data_type: str, connection: socket, master=None, **kwargs):
         # default constructor of tkinter slider
         Scale.__init__(self, master, **kwargs)
-        self.dataType = dataType
-        self.bind("<ButtonRelease-1>", self.updateValue)
+        self.data_type = data_type
+        self.bind("<ButtonRelease-1>", self.update_value)
         self.connection = connection
 
-    def printAngle(self):
-        print("Angle = ", self.get(), " ", self.dataType)
+    def print_angle(self):
+        print(f"Angle = {self.get()} {self.data_type}")
 
-    def updateValue(self, event):
-        self.printAngle()
-        sendData(self.get(), self.dataType)
+    def update_value(self, event):
+        self.print_angle()
+        send_data(self.get(), self.data_type)
 
     def decrement(self):
         self.set(self.get() - 1)
-        self.printAngle()
+        self.print_angle()
 
     def increment(self):
         self.set(self.get() + 1)
-        self.printAngle()
+        self.print_angle()
 
     def powerDown(self):
         self.set(self.get() - 1)
-        self.printAngle()
+        self.print_angle()
 
-    def keyReleased(self):
-        sendData(self.get(), self.dataType)
+    def key_released(self):
+        send_data(self.get(), self.data_type)
 
 
 class App(threading.Thread):
@@ -62,19 +66,19 @@ class App(threading.Thread):
         self.app = Frame(self.root, bg="white")
         self.app.grid()
         self.app.focus_set()
-        self.initGuiElements()
-        self.initVideoStream(STREAM_HOST)
-        self.initJoystick()
+        self.init_GUI_elements()
+        self.init_video_stream(STREAM_HOST)
+        self.init_joystick()
         self.root.mainloop()
 
-    def initVideoStream(self, STREAM_HOST):
+    def init_video_stream(self, STREAM_HOST):
         # Create a label in the frame
         self.lmain = Label(self.app)
         self.lmain.grid(row=0, column=1)
         self.videoStream = VideoStreamThread(self.lmain, STREAM_HOST)
         self.videoStream.start()
 
-    def initGuiElements(self):
+    def init_GUI_elements(self):
         self.sliderTilt = PositionSlider(
             "t",
             self.root,
@@ -130,25 +134,19 @@ class App(threading.Thread):
         self.root.bind("<Down>", self.sliderPan.decrement)
         self.root.bind("<W>", self.sliderPower.increment)
         self.root.bind("<S>", self.sliderPower.decrement)
-        self.root.bind("<KeyRelease-Left>", self.sliderTilt.keyReleased)
-        self.root.bind("<KeyRelease-Right>", self.sliderTilt.keyReleased)
-        self.root.bind("<KeyRelease-Up>", self.sliderPan.keyReleased)
-        self.root.bind("<KeyRelease-Down>", self.sliderPan.keyReleased)
-        self.root.bind("<KeyRelease-W>", self.sliderPower.keyReleased)
-        self.root.bind("<KeyRelease-S>", self.sliderPower.keyReleased)
+        self.root.bind("<KeyRelease-Left>", self.sliderTilt.key_released)
+        self.root.bind("<KeyRelease-Right>", self.sliderTilt.key_released)
+        self.root.bind("<KeyRelease-Up>", self.sliderPan.key_released)
+        self.root.bind("<KeyRelease-Down>", self.sliderPan.key_released)
+        self.root.bind("<KeyRelease-W>", self.sliderPower.key_released)
+        self.root.bind("<KeyRelease-S>", self.sliderPower.key_released)
 
-    def initJoystick(self):
+    def init_joystick(self):
         self.j = Joystick(app.sliderPan, app.sliderTilt, app.sliderPower)
         self.j.start()
 
 
-WINDOWS_HOST = "192.168.1.41"
-STREAM_HOST = "http://192.168.1.46:8081/"
-RASPBERRY_PORT = 5000
-BAUD_RATE = 9600
-
-
-def sendData(
+def send_data(
     data,
     dataType,
 ):
@@ -165,8 +163,6 @@ def sendData(
 
     # make sure data has 3 digits
     toSend = str(data).rjust(3, "0") + dataType
-
-    toSend = str(data) + str(dataType)
     print(toSend)
     connection.send((toSend).encode("utf-8"))
 
@@ -175,7 +171,7 @@ if __name__ == "__main__":
     socketInstance = Socket(WINDOWS_HOST, RASPBERRY_PORT)
 
     print("Listening...")
-    connection, address = socketInstance.startListening()
+    connection, address = socketInstance.start_listening()
     print(f"Connection from: {str(address)}")
     app = App(connection)
 
