@@ -7,7 +7,7 @@ import threading
 from time import sleep
 from Joystick import Joystick
 
-WINDOWS_HOST = "192.168.1.41"
+WINDOWS_HOST = "192.168.1.43"
 STREAM_HOST = "http://192.168.1.46:8081/"
 RASPBERRY_PORT = 5000
 BAUD_RATE = 9600

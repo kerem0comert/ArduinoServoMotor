@@ -52,10 +52,12 @@ void loop()
       operateOnData(readChar);
       incomingData = "";
     }
-    else
+    else{
       incomingData += readChar;
+    }
+    delay(SERVO_DELAY);
   }
-  // delay(100);
+
 }
 
 void operateOnData(char readChar)
@@ -87,14 +89,21 @@ void operateOnData(char readChar)
   else if (readChar == STEER)
   {
   }
-  valPotent = analogRead(PIN_POTENT);
-  Serial.println(valPotent);
+  //valPotent = analogRead(PIN_POTENT);
+  //Serial.println(valPotent);
   // Serial.println(potentValue);
-  // printSerial();
+   printSerial();
 }
 
 void printSerial()
 {
-  Serial.print("---- tilt: " + valTiltCamera "\n---- pan: " + valPanCamera + "\n---- power:
-    " + valPower + "\n----valSteer: " + valSteer);
+    //Serial.print("---- tilt: " + valTiltCamera + "\n---- pan: " + valPanCamera + "\n---- power:" + valPower + "\n----valSteer: " + valSteer);
+    Serial.println("---- tilt: ");
+    Serial.print(valTiltCamera);
+    Serial.println("---- pan: ");
+    Serial.print(valPanCamera);
+    Serial.println("---- power:");
+    Serial.print(valPower);
+    Serial.println("----valSteer:");
+    Serial.print(valSteer);
 }

@@ -32,9 +32,9 @@ class Joystick(threading.Thread):
             # Joystick reading
             pygame.event.pump()
             self.sliderTilt.set(int(interp(self.j.get_axis(0), [-1, 1], [-90, 90])))
-            self.sliderPan.set(int(interp(self.j.get_axis(1), [-1, 1], [-30, 90])))
-            self.sliderTilt.keyReleased()
-            self.sliderPan.keyReleased()
+            self.sliderPower.set(int(interp(self.j.get_axis(1), [-1, 1], [100, -100])))
+            self.sliderTilt.key_released()
+            self.sliderPower.key_released()
 
             # Make this loop work at update_rate
             while elapsed < 0.1:
